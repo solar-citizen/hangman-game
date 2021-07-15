@@ -73,7 +73,6 @@
 
         function drawManSegment(incorrectGuesses) {
             ctx.lineWidth = 4
-            ctx.beginPath()
 
             if (incorrectGuesses === 0) {
                 ctx.strokeRect(20, 20, 20, 20);
@@ -105,13 +104,33 @@
             }
         }
 
-        // display progress near man figure
-        function displayCorrectGuesses(answerArray) {
+        // drawing underscores for guesses
+        function displayUnderscores(howMany) {
+            ctx.lineWidth = 4
+            ctx.beginPath()
+
+            for (i = 0; i < howMany; i++) {
+                ctx.moveTo((i * 30) + 10, 160)
+                ctx.lineTo((i * 30) + 30, 160)
+            }
+
+            ctx.stroke()
+        }
+
+        // drawing correct guesses near man figure
+        function displayCorrectGuesses(guess, index) {
             ctx.font = "30px Courier"
-            ctx.fillStyle = "Black"
-            ctx.textAlign = "center"
-            ctx.textBaseline = "middle"
-            ctx.fillText(answerArray.join(' '), 400, 100)
+            ctx.fillText(guess, (index * 30) + 10, 150)
+        }
+
+        // drawing wrong guesses near man figure
+        function displayInCorrectGuesses(guess, index) {
+            ctx.lineWidth = 2
+            ctx.font = "25px Courier"
+            ctx.fillText(guess, 380, (index * 20) + 40)
+            ctx.moveTo(380, (index * 20) + 35)
+            ctx.lineTo(400, (index * 20) + 35)
+            ctx.stroke()
         }
 
         // setting up variables
@@ -119,6 +138,8 @@
         let answerArray = setupAnswerArray(word)
         let remainingLetters = word.length
         let incorrectGuesses = 0
+
+        displayUnderscores(word.length)
 
         // Игровой цикл
         while (remainingLetters > 0) {
@@ -142,10 +163,11 @@
 
                 if (correctGuesses === 0) {
                     drawManSegment(incorrectGuesses)
+                    displayInCorrectGuesses(guess, incorrectGuesses)
                     incorrectGuesses++
                 }
 
-                displayCorrectGuesses(answerArray)
+
             }
 
             // Вычитание попыток
@@ -155,7 +177,7 @@
         }
 
         // Отображение ответа и конец
-        showAnswerAndCongratulatePlayer(answerArray);
+        showAnswerAndCongratulatePlayer(answerArray)
 
 
     </script>
