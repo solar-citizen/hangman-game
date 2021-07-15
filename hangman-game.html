@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html>
+
 <head>
- <meta charset="UTF-8">
- <title>Hangman</title>
+    <meta charset="UTF-8">
+    <title>Hangman</title>
 </head>
+
 <body>
     <h1 style="text-align: center;">Hangman</h1>
 
@@ -17,19 +19,19 @@
         // Создание массиав со словами
         function pickWord() {
             let words = [
-            "программа",
-            "макака",
-            "прекрасный",
-            "оладушек",
-            "зверобой",
-            "занавески"
-        ]
+                "программа",
+                "макака",
+                "прекрасный",
+                "оладушек",
+                "зверобой",
+                "занавески"
+            ]
 
             // Выбор случайного слова
             return words[Math.floor(Math.random() * words.length)]
         }
 
-        
+
 
         // Создание итогового массива
         function setupAnswerArray(word) {
@@ -40,7 +42,7 @@
 
             return answerArray
         }
-        
+
         // Отображение состояния игры
         function showPlayerProgress(answerArray) {
             alert(answerArray.join(' '))
@@ -100,21 +102,30 @@
                 ctx.moveTo(30, 60);
                 ctx.lineTo(50, 50);
                 ctx.stroke();
-            }  
+            }
         }
 
-        // Setting up variables
+        // display progress near man figure
+        function displayCorrectGuesses(answerArray) {
+            ctx.font = "30px Courier"
+            ctx.fillStyle = "Black"
+            ctx.textAlign = "center"
+            ctx.textBaseline = "middle"
+            ctx.fillText(answerArray.join(' '), 400, 100)
+        }
+
+        // setting up variables
         let word = pickWord()
         let answerArray = setupAnswerArray(word)
         let remainingLetters = word.length
         let incorrectGuesses = 0
-        
+
         // Игровой цикл
         while (remainingLetters > 0) {
 
             // Отображение состояния игры
             showPlayerProgress(answerArray)
-            
+
             // Запрос варианта ответа
             let guess = getGuess()
 
@@ -133,18 +144,21 @@
                     drawManSegment(incorrectGuesses)
                     incorrectGuesses++
                 }
+
+                displayCorrectGuesses(answerArray)
             }
 
             // Вычитание попыток
             //remainingTries--
-            
+
             // Конец игрового цикла
         }
 
         // Отображение ответа и конец
         showAnswerAndCongratulatePlayer(answerArray);
 
-        
+
     </script>
 </body>
+
 </html>
