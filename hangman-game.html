@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <meta charset="UTF-8">
+ <title>Hangman</title>
+</head>
+<body>
+    <h1 style="text-align: center;">Hangman</h1>
+
+    <canvas id="canvas" width="500" height="500"></canvas>
+
+    <script>
+        // Initiate Canvas
+        let canvas = document.getElementById('canvas')
+        let ctx = canvas.getContext('2d')
+
+        // Создание массиав со словами
+        function pickWord() {
+            let words = [
+            "программа",
+            "макака",
+            "прекрасный",
+            "оладушек",
+            "зверобой",
+            "занавески"
+        ]
+
+            // Выбор случайного слова
+            return words[Math.floor(Math.random() * words.length)]
+        }
+
+        
+
+        // Создание итогового массива
+        function setupAnswerArray(word) {
+            let answerArray = []
+            for (i = 0; i < word.length; i++) {
+                answerArray[i] = "_"
+            }
+
+            return answerArray
+        }
+        
+        // Отображение состояния игры
+        function showPlayerProgress(answerArray) {
+            alert(answerArray.join(' '))
+        }
+
+        // Запрос варианта ответа
+        function getGuess() {
+            return prompt("Угадайте букву или нажмите 'Отмена' для выхода из игры.")
+        }
+
+        // Обновление состояния игры
+        function updateGameState(guess, word, answerArray) {
+            let appearances = 0
+            for (let j = 0; j < word.length; j++) {
+                if (word[j] === guess.toLowerCase() && answerArray[j] == "_") {
+                    answerArray[j] = guess.toLowerCase()
+                    appearances++
+                }
+            }
+
+            return appearances
+        }
+
+        function showAnswerAndCongratulatePlayer(answerArray) {
+            showPlayerProgress(answerArray)
+            alert("Отлично. Было загадано слово " + word)
+        }
+
+        function drawManSegment(incorrectGuesses) {
+            ctx.lineWidth = 4
+            ctx.beginPath()
+
+            if (incorrectGuesses === 0) {
+                ctx.strokeRect(20, 20, 20, 20);
+            } else if (incorrectGuesses === 1) {
+                ctx.beginPath();
+                ctx.moveTo(30, 40);
+                ctx.lineTo(30, 80);
+                ctx.stroke();
+            } else if (incorrectGuesses === 2) {
+                ctx.beginPath();
+                ctx.moveTo(30, 80);
+                ctx.lineTo(10, 110);
+                ctx.stroke();
+            } else if (incorrectGuesses === 3) {
+                ctx.beginPath();
+                ctx.moveTo(30, 80);
+                ctx.lineTo(50, 110);
+                ctx.stroke();
+            } else if (incorrectGuesses === 4) {
+                ctx.beginPath();
+                ctx.moveTo(30, 60);
+                ctx.lineTo(10, 50);
+                ctx.stroke();
+            } else if (incorrectGuesses === 5) {
+                ctx.beginPath();
+                ctx.moveTo(30, 60);
+                ctx.lineTo(50, 50);
+                ctx.stroke();
+            }  
+        }
+
+        // Setting up variables
+        let word = pickWord()
+        let answerArray = setupAnswerArray(word)
+        let remainingLetters = word.length
+        let incorrectGuesses = 0
+        
+        // Игровой цикл
+        while (remainingLetters > 0) {
+
+            // Отображение состояния игры
+            showPlayerProgress(answerArray)
+            
+            // Запрос варианта ответа
+            let guess = getGuess()
+
+            if (guess === null) {
+                // Выход из игрового цикла
+                break
+            } else if (guess.length !== 1) {
+                alert("Пожалуйста, введите только одну букву.")
+            } else {
+                // Обновление состояния игры
+                let correctGuesses = updateGameState(guess, word, answerArray)
+
+                remainingLetters -= correctGuesses
+
+                if (correctGuesses === 0) {
+                    drawManSegment(incorrectGuesses)
+                    incorrectGuesses++
+                }
+            }
+
+            // Вычитание попыток
+            //remainingTries--
+            
+            // Конец игрового цикла
+        }
+
+        // Отображение ответа и конец
+        showAnswerAndCongratulatePlayer(answerArray);
+
+        
+    </script>
+</body>
+</html>
